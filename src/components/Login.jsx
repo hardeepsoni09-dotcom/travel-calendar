@@ -47,7 +47,7 @@ export default function Login() {
         <div className="login-card">
           <div className="login-header">
             <div className="logo-icon">✈️</div>
-            <h1>Travel Calendar</h1>
+            <h1>Au-India-Trave</h1>
             <p>Connect with travelers between Australia and India</p>
           </div>
 
