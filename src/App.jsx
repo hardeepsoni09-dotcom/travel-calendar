@@ -1,126 +1,94 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-import Calendar from 'react-calendar'
-import "react-calendar/dist/Calendar.css";
+import { useState, useEffect } from 'react';
+import { auth, db } from './firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
-  const [date, setDate] = useState(new Date())
+export default function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [trips, setTrips] = useState([]);
+  const [cities, setCities] = useState([
+    'Sydney',
+    'Melbourne',
+    'Perth',
+    'Brisbane',
+    'Darwin',
+    'Delhi',
+    'Mumbai',
+    'Calcutta',
+    'Bangalore',
+  ]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(collection(db, 'trips'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setTrips(data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+    });
+
+    return unsubscribe;
+  }, [user]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'cities'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (snapshot.docs.length > 0) {
+        const citiesData = snapshot.docs[0].data().list || [];
+        setCities(citiesData);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (loading) {
+    return <div className="loading-screen">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Login />;
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <header className="app-header">
+        <div className="header-content">
+          <h1 className="app-title">✈️ Travel Calendar</h1>
+          <p className="app-subtitle">Australia ↔ India Community</p>
         </div>
-        <div>
-          <h1>✈️ My Travel Calendar</h1>
-          <p>
-            Plan your adventures, track your trips! 🌍
-          </p>
+        <div className="user-section">
+          <div className="user-info">
+            <div className="user-avatar">
+              {user.email.charAt(0).toUpperCase()}
+            </div>
+            <span className="user-email">{user.email}</span>
+          </div>
+          <button
+            onClick={() => signOut(auth)}
+            className="logout-btn"
+          >
+            Sign Out
+          </button>
         </div>
-        <div className="calendar-container">
-  <h2>📅 Select your travel date</h2>
-  <Calendar 
-    onChange={setDate} 
-    value={date}
-  />
-  <p>📍 Selected: {date.toLocaleDateString()}</p>
-</div>
-      </section>
+      </header>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <Dashboard user={user} trips={trips} cities={cities} />
+    </div>
+  );
 }
-
-export default App
