@@ -11,17 +11,14 @@ html, body, #root {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f4f8;
-  background-image: 
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30"><rect fill="%230052B4" width="30" height="30"/><rect fill="%23F93800" x="30" width="30" height="30"/><circle cx="15" cy="15" r="8" fill="%23FFD700" opacity="0.3"/><circle cx="45" cy="15" r="8" fill="%23FFFFFF" opacity="0.3"/></svg>');
-  background-size: 400px 200px;
+  background: linear-gradient(90deg, #e8f4f8 0%, #f5e8f4 100%);
   background-attachment: fixed;
-  background-repeat: repeat;
-  opacity: 1;
   color: #1a3a5c;
   line-height: 1.6;
+  position: relative;
 }
 
+/* Composite background with landmarks */
 body::before {
   content: '';
   position: fixed;
@@ -29,10 +26,29 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    linear-gradient(135deg, rgba(26, 58, 92, 0.02) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background-image: 
+    linear-gradient(90deg, 
+      rgba(200, 230, 245, 0.75) 0%, 
+      rgba(200, 230, 245, 0.75) 50%,
+      rgba(245, 230, 255, 0.75) 50%,
+      rgba(245, 230, 255, 0.75) 100%),
+    url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sydney_Opera_House_-_Dec_2008.jpg/1280px-Sydney_Opera_House_-_Dec_2008.jpg'),
+    url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Uluru_2019.jpg/1280px-Uluru_2019.jpg'),
+    url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Taj_Mahal%2C_Agra%2C_India_-_April_2004.jpg/1280px-Taj_Mahal%2C_Agra%2C_India_-_April_2004.jpg');
+  background-position: 
+    center,
+    left 5% top 10%,
+    left 20% bottom 15%,
+    right 5% top 20%;
+  background-size: 
+    cover,
+    25% auto,
+    20% auto,
+    30% auto;
+  background-repeat: no-repeat;
   pointer-events: none;
   z-index: -1;
+  opacity: 0.85;
 }
 
 .app {
@@ -42,14 +58,15 @@ body::before {
   background: transparent;
 }
 
+/* HEADER STYLING */
 .app-header {
-  background: linear-gradient(135deg, #0d2847 0%, #1a3a5c 100%);
+  background: linear-gradient(135deg, #0052CC 0%, #003d99 100%);
   color: white;
   padding: 24px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 20px rgba(13, 40, 71, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 52, 204, 0.2);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -68,10 +85,12 @@ body::before {
 }
 
 .app-subtitle {
-  font-size: 12px;
-  opacity: 0.85;
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 1;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  color: #ffffff;
 }
 
 .user-section {
@@ -90,13 +109,13 @@ body::before {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .user-email {
@@ -109,9 +128,9 @@ body::before {
 }
 
 .logout-btn {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
@@ -122,8 +141,8 @@ body::before {
 }
 
 .logout-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
 }
 
 .loading-screen {
@@ -132,16 +151,16 @@ body::before {
   justify-content: center;
   height: 100vh;
   font-size: 20px;
-  color: #0d2847;
+  color: #0052CC;
   font-weight: 600;
-  background: linear-gradient(135deg, #f0f4f8 0%, #e8ecf1 100%);
+  background: linear-gradient(135deg, #e8f4f8 0%, #f5e8f4 100%);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .app-header {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     padding: 16px;
   }
 

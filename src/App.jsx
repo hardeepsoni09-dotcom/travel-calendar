@@ -69,7 +69,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <div className="header-content">
-          <h1 className="app-title">✈️ Travel Calendar</h1>
+          <h1 className="app-title">✈️ Au-India-Travel</h1>
           <p className="app-subtitle">Australia ↔ India Community</p>
         </div>
         <div className="user-section">
