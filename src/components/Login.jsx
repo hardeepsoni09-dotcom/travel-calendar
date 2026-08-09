@@ -14,7 +14,6 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Get today's date and time dynamically
   const getTodayDateAndTime = () => {
     const now = new Date();
     const dateOptions = { month: 'long', day: 'numeric' };
