@@ -92,6 +92,9 @@ export default function App() {
       </header>
 
       <Dashboard user={user} trips={trips} cities={cities} />
-
       <footer className="app-footer">
-        <p>Questions or feedback? Email: <a href="mail
+        <p>Questions or feedback? Email: <a href="mailto:hardeep.soni09@gmail.com">hardeep.soni09@gmail.com</a></p>
+      </footer>
+    </div>
+  );
+}
