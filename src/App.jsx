@@ -22,6 +22,7 @@ export default function App() {
     'Bangalore',
   ]);
 
+  // Monitor auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -30,6 +31,7 @@ export default function App() {
     return unsubscribe;
   }, []);
 
+  // Listen to trips in Firestore
   useEffect(() => {
     if (!user) return;
 
@@ -45,6 +47,7 @@ export default function App() {
     return unsubscribe;
   }, [user]);
 
+  // Listen to cities in Firestore
   useEffect(() => {
     const q = query(collection(db, 'cities'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -89,6 +92,6 @@ export default function App() {
       </header>
 
       <Dashboard user={user} trips={trips} cities={cities} />
-    </div>
-  );
-}
+
+      <footer className="app-footer">
+        <p>Questions or feedback? Email: <a href="mail
