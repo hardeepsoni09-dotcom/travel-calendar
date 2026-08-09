@@ -115,6 +115,40 @@
   color: #999;
 }
 
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 45px;
+  width: 100%;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.password-toggle:active {
+  transform: scale(0.95);
+}
+
 .error-message {
   display: flex;
   align-items: center;
@@ -257,9 +291,42 @@
   opacity: 0.9;
 }
 
-.date-display {
-  font-size: 24px;
+.calendar-badge-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 12px 0;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.calendar-badge-month {
+  background: #dc2626;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px 4px 0 0;
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.calendar-badge-day {
+  background: white;
+  color: #1a3a5c;
+  padding: 8px 16px;
+  border-radius: 0 0 4px 4px;
+  font-size: 28px;
+  font-weight: 700;
+  min-width: 60px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-top: none;
+}
+
+.date-display {
+  font-size: 14px;
+  font-weight: 600;
   color: #ffd700;
   margin: 8px 0;
 }
@@ -323,8 +390,29 @@
     padding: 16px;
   }
 
+  .calendar-badge-day {
+    font-size: 24px;
+    padding: 6px 12px;
+    min-width: 50px;
+  }
+
+  .calendar-badge-month {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
   .date-display {
-    font-size: 20px;
+    font-size: 13px;
+  }
+
+  .password-wrapper input {
+    padding-right: 40px;
+  }
+
+  .password-toggle {
+    right: 8px;
+    font-size: 16px;
+    padding: 6px;
   }
 
   .login-footer {
@@ -356,6 +444,16 @@
     font-size: 16px;
   }
 
+  .password-wrapper input {
+    padding-right: 38px;
+  }
+
+  .password-toggle {
+    right: 6px;
+    font-size: 16px;
+    padding: 6px;
+  }
+
   .login-info {
     gap: 12px;
   }
@@ -372,8 +470,23 @@
     font-size: 11px;
   }
 
+  .calendar-badge-display {
+    margin: 8px 0;
+  }
+
+  .calendar-badge-day {
+    font-size: 20px;
+    padding: 6px 12px;
+    min-width: 45px;
+  }
+
+  .calendar-badge-month {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
   .date-display {
-    font-size: 18px;
+    font-size: 12px;
     margin: 6px 0;
   }
 
