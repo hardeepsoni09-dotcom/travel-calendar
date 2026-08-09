@@ -14,10 +14,16 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Get today's date dynamically
-  const getTodayDate = () => {
-    const options = { month: 'long', day: 'numeric' };
-    return new Date().toLocaleDateString('en-US', options);
+  // Get today's date and time dynamically
+  const getTodayDateAndTime = () => {
+    const now = new Date();
+    const dateOptions = { month: 'long', day: 'numeric' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+    
+    const date = now.toLocaleDateString('en-US', dateOptions);
+    const time = now.toLocaleTimeString('en-US', timeOptions);
+    
+    return `${date}, ${time}`;
   };
 
   const handleAuth = async (e) => {
@@ -147,7 +153,7 @@ export default function Login() {
           <div className="info-card">
             <div className="info-icon">📅</div>
             <h3>Easy Planning</h3>
-            <p className="date-display">{getTodayDate()}</p>
+            <p className="date-display">{getTodayDateAndTime()}</p>
             <p>View travel dates and find fellow travelers</p>
           </div>
           <div className="info-card">
