@@ -157,6 +157,34 @@ body::before {
   background: linear-gradient(135deg, #e8f4f8 0%, #f5e8f4 100%);
 }
 
+/* FOOTER STYLING */
+.app-footer {
+  background: linear-gradient(135deg, #0052CC 0%, #003d99 100%);
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  padding: 24px 20px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+}
+
+.app-footer p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.app-footer a {
+  color: rgba(255, 255, 255, 1);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .app-header {
@@ -191,6 +219,11 @@ body::before {
 
   .logout-btn {
     padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .app-footer {
+    padding: 16px;
     font-size: 12px;
   }
 }
@@ -229,5 +262,11 @@ body::before {
   .logout-btn {
     padding: 6px 10px;
     font-size: 11px;
+  }
+
+  .app-footer {
+    padding: 12px;
+    font-size: 11px;
+    margin-top: 24px;
   }
 }
