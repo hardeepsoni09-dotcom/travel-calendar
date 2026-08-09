@@ -1,120 +1,159 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../styles/CheckTravelers.css';
+import { db } from '../firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 
-export default function CheckTravelers({ trips, onBack }) {
+export default function CheckTravelers({ onBack }) {
+  const [trips, setTrips] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTravelers, setSelectedTravelers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const travelersOnDate = useMemo(() => {
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, 'trips'),
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setTrips(data);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error fetching trips:', error);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
+
+  const getTravelersByDate = (date) => {
+    const dateStr = date.toISOString().split('T')[0];
     return trips.filter((trip) => {
       const start = new Date(trip.startDate);
       const end = new Date(trip.returnDate);
-      return selectedDate >= start && selectedDate <= end;
+      const current = new Date(dateStr);
+      return current >= start && current <= end;
     });
-  }, [trips, selectedDate]);
+  };
 
-  const tileContent = ({ date }) => {
-    const dateTravelers = trips.filter((trip) => {
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    const travelers = getTravelersByDate(date);
+    setSelectedTravelers(travelers);
+  };
+
+  const getTravelerInitials = (name) => {
+    return name
+      .split(' ')
+      .map((word) => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const getDatesWithTravelers = () => {
+    const datesSet = new Set();
+    trips.forEach((trip) => {
       const start = new Date(trip.startDate);
       const end = new Date(trip.returnDate);
-      return date >= start && date <= end;
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        datesSet.add(d.toISOString().split('T')[0]);
+      }
     });
+    return datesSet;
+  };
 
-    if (dateTravelers.length === 0) return null;
+  const datesWithTravelers = getDatesWithTravelers();
 
+  const tileContent = ({ date, view }) => {
+    if (view === 'month') {
+      const dateStr = date.toISOString().split('T')[0];
+      if (datesWithTravelers.has(dateStr)) {
+        const travelers = getTravelersByDate(date);
+        const initials = travelers
+          .slice(0, 3)
+          .map((t) => getTravelerInitials(t.name))
+          .join(', ');
+
+        return (
+          <div className="calendar-badge">
+            <span>{initials}</span>
+          </div>
+        );
+      }
+    }
+    return null;
+  };
+
+  if (loading) {
     return (
-      <div className="calendar-badge">
-        {dateTravelers.length}
+      <div className="loading-container">
+        <p>Loading calendar...</p>
       </div>
     );
-  };
-
-  const tileClassName = ({ date }) => {
-    const hasTravelers = trips.some((trip) => {
-      const start = new Date(trip.startDate);
-      const end = new Date(trip.returnDate);
-      return date >= start && date <= end;
-    });
-    return hasTravelers ? 'has-travelers' : '';
-  };
+  }
 
   return (
-    <div className="check-travelers">
-      <div className="travelers-header">
-        <button onClick={onBack} className="back-btn">
-          ← Back
-        </button>
-        <h2>📅 Community Travel Calendar</h2>
+    <div className="check-travelers-container">
+      <button className="back-button" onClick={onBack}>
+        ← Back
+      </button>
+
+      <h2>Community Travel Calendar</h2>
+
+      <div className="calendar-wrapper">
+        <Calendar
+          value={selectedDate}
+          onChange={handleDateClick}
+          tileContent={tileContent}
+          minDate={new Date(2026, 0, 1)}
+          maxDate={new Date(2027, 11, 31)}
+        />
       </div>
 
-      <div className="travelers-container">
-        <div className="calendar-section">
-          <h3>Select a Date</h3>
-          <div className="calendar-wrapper">
-            <Calendar
-              onChange={setSelectedDate}
-              value={selectedDate}
-              tileContent={tileContent}
-              tileClassName={tileClassName}
-            />
-          </div>
-        </div>
-
-        <div className="travelers-section">
+      <div className="travelers-info">
+        <div className="selected-date-display">
           <h3>
-            Travelers on{' '}
-            <span className="date-highlight">
-              {selectedDate.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </span>
+            {selectedDate.toLocaleDateString('en-US', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
           </h3>
-
-          {travelersOnDate.length === 0 ? (
-            <div className="no-travelers">
-              <div className="empty-icon">🛫</div>
-              <p>No travelers on this date</p>
-            </div>
-          ) : (
-            <div className="travelers-grid">
-              {travelersOnDate.map((trip) => (
-                <div key={trip.id} className="traveler-card">
-                  <div className="traveler-header">
-                    <div className="traveler-name">{trip.name}</div>
-                  </div>
-                  <div className="traveler-route">
-                    <span className="city-badge from">{trip.origin}</span>
-                    <span className="route-arrow">→</span>
-                    <span className="city-badge to">{trip.destination}</span>
-                  </div>
-                  <div className="traveler-dates">
-                    <div className="date-item">
-                      <span className="date-label">Depart:</span>
-                      <span className="date-value">
-                        {new Date(trip.startDate).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </span>
-                    </div>
-                    <div className="date-item">
-                      <span className="date-label">Return:</span>
-                      <span className="date-value">
-                        {new Date(trip.returnDate).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
+
+        {selectedTravelers.length > 0 ? (
+          <div className="travelers-list">
+            {selectedTravelers.map((traveler) => (
+              <div key={traveler.id} className="traveler-card">
+                <div className="traveler-info">
+                  <h4>{traveler.name}</h4>
+                  <p>
+                    <strong>Email:</strong> {traveler.email}
+                  </p>
+                  <p>
+                    <strong>Route:</strong> {traveler.origin} → {traveler.destination}
+                  </p>
+                  <p>
+                    <strong>Dates:</strong>{' '}
+                    {new Date(traveler.startDate).toLocaleDateString()} to{' '}
+                    {new Date(traveler.returnDate).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="no-travelers">
+            <p>No travelers on this date</p>
+          </div>
+        )}
       </div>
     </div>
   );
