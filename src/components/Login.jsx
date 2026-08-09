@@ -10,8 +10,15 @@ export default function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Get today's date dynamically
+  const getTodayDate = () => {
+    const options = { month: 'long', day: 'numeric' };
+    return new Date().toLocaleDateString('en-US', options);
+  };
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -70,17 +77,27 @@ export default function Login() {
 
             <div className="form-group">
               <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError('');
-                }}
-                placeholder="••••••••"
-                required
-              />
+              <div className="password-wrapper">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError('');
+                  }}
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
             </div>
 
             {error && (
@@ -130,6 +147,7 @@ export default function Login() {
           <div className="info-card">
             <div className="info-icon">📅</div>
             <h3>Easy Planning</h3>
+            <p className="date-display">{getTodayDate()}</p>
             <p>View travel dates and find fellow travelers</p>
           </div>
           <div className="info-card">

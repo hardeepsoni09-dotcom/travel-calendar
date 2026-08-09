@@ -99,7 +99,9 @@
   font-size: 14px;
   font-family: inherit;
   transition: all 0.3s ease;
-  background: #f8fafb;
+  background: #ffffff;
+  color: #1a3a5c;
+  font-weight: 500;
 }
 
 .form-group input:focus {
@@ -255,6 +257,13 @@
   opacity: 0.9;
 }
 
+.date-display {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffd700;
+  margin: 8px 0;
+}
+
 .login-footer {
   text-align: center;
   margin-top: 40px;
@@ -314,6 +323,10 @@
     padding: 16px;
   }
 
+  .date-display {
+    font-size: 20px;
+  }
+
   .login-footer {
     margin-top: 30px;
     font-size: 12px;
@@ -339,7 +352,7 @@
   }
 
   .form-group input {
-    padding: 10px 12px;
+    padding: 12px 12px;
     font-size: 16px;
   }
 
@@ -357,6 +370,11 @@
 
   .info-card p {
     font-size: 11px;
+  }
+
+  .date-display {
+    font-size: 18px;
+    margin: 6px 0;
   }
 
   .login-footer {
