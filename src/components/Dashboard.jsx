@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { auth } from '../firebase';
 import CheckTravelers from './CheckTravelers';
 import AddTrip from './AddTrip';
 import ManageCities from './ManageCities';
@@ -6,6 +7,38 @@ import '../styles/Dashboard.css';
 
 export default function Dashboard({ user, trips, cities }) {
   const [activeView, setActiveView] = useState('home');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState(null);
+
+  // Check if user is admin (in real app, check Firestore admins collection)
+  // For now, we'll pass this from parent or check localStorage
+  useState(() => {
+    const adminUid = localStorage.getItem('adminUid');
+    if (adminUid === auth.currentUser?.uid) {
+      setIsAdmin(true);
+    }
+  }, []);
+
+  // Calculate travelers by destination
+  const travelersbyDestination = useMemo(() => {
+    const destMap = {};
+    trips.forEach((trip) => {
+      if (!destMap[trip.destination]) {
+        destMap[trip.destination] = [];
+      }
+      destMap[trip.destination].push(trip.name);
+    });
+    return destMap;
+  }, [trips]);
+
+  // Sort destinations by number of travelers
+  const sortedDestinations = useMemo(() => {
+    return Object.entries(travelersbyDestination)
+      .sort((a, b) => b[1].length - a[1].length)
+      .slice(0, 6); // Show top 6 destinations
+  }, [travelersbyDestination]);
+
+  const totalTravelers = useMemo(() => new Set(trips.map(t => t.name)).size, [trips]);
 
   return (
     <div className="dashboard">
@@ -14,7 +47,7 @@ export default function Dashboard({ user, trips, cities }) {
           <div className="welcome-section">
             <h2>Welcome back!</h2>
             <p className="welcome-subtitle">
-              {trips.length} active trips in the community
+              {trips.length} active trips • {totalTravelers} travelers in community
             </p>
           </div>
 
@@ -43,17 +76,58 @@ export default function Dashboard({ user, trips, cities }) {
               <span className="btn-arrow">→</span>
             </button>
 
-            <button
-              className="action-btn cities-btn"
-              onClick={() => setActiveView('cities')}
-            >
-              <span className="btn-icon">🏙️</span>
-              <span className="btn-text">
-                <strong>Manage Cities</strong>
-                <small>Add or remove locations</small>
-              </span>
-              <span className="btn-arrow">→</span>
-            </button>
+            {isAdmin && (
+              <button
+                className="action-btn cities-btn"
+                onClick={() => setActiveView('cities')}
+              >
+                <span className="btn-icon">🏙️</span>
+                <span className="btn-text">
+                  <strong>Manage Cities</strong>
+                  <small>Admin only</small>
+                </span>
+                <span className="btn-arrow">→</span>
+              </button>
+            )}
+          </div>
+
+          {/* DESTINATION WIDGET */}
+          <div className="destination-widget">
+            <h3>Travelers by Destination</h3>
+            <p className="widget-subtitle">Click to see who's traveling where</p>
+
+            <div className="destination-grid">
+              {sortedDestinations.map(([destination, travelers]) => (
+                <div
+                  key={destination}
+                  className="destination-card"
+                  onClick={() => setSelectedDestination(
+                    selectedDestination === destination ? null : destination
+                  )}
+                >
+                  <div className="destination-header">
+                    <h4>{destination}</h4>
+                    <span className="traveler-count">{travelers.length}</span>
+                  </div>
+
+                  {selectedDestination === destination && (
+                    <div className="destination-travelers">
+                      <ul>
+                        {travelers.map((name, idx) => (
+                          <li key={idx}>✈️ {name}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {sortedDestinations.length === 0 && (
+              <div className="no-destinations">
+                <p>No travelers yet. Be the first to add your trip! 🌍</p>
+              </div>
+            )}
           </div>
 
           {trips.length > 0 && (
@@ -87,7 +161,7 @@ export default function Dashboard({ user, trips, cities }) {
         <AddTrip cities={cities} onBack={() => setActiveView('home')} />
       )}
 
-      {activeView === 'cities' && (
+      {activeView === 'cities' && isAdmin && (
         <ManageCities cities={cities} onBack={() => setActiveView('home')} />
       )}
     </div>

@@ -132,7 +132,7 @@
 
 .auth-button {
   padding: 14px 16px;
-  background: linear-gradient(135deg, #0d2847 0%, #1a3a5c 100%);
+  background: linear-gradient(135deg, #0052CC 0%, #003d99 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -145,7 +145,7 @@
 
 .auth-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(13, 40, 71, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 52, 204, 0.3);
 }
 
 .auth-button:active:not(:disabled) {

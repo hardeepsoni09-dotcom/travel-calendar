@@ -1,7 +1,7 @@
 .dashboard {
   flex: 1;
   padding: 32px 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
@@ -31,7 +31,7 @@
 
 .welcome-section h2 {
   font-size: 32px;
-  color: #0d2847;
+  color: #1a3a5c;
   margin-bottom: 8px;
   font-weight: 700;
 }
@@ -61,12 +61,12 @@
   font-family: inherit;
   font-size: 15px;
   font-weight: 600;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .action-btn:hover {
   transform: translateY(-6px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
 .action-btn:active {
@@ -105,28 +105,124 @@
   transform: translateX(4px);
 }
 
+/* COLOR-BLIND FRIENDLY BUTTON COLORS */
+
 .travelers-btn {
-  background: linear-gradient(135deg, #0d2847 0%, #1a3a5c 100%);
+  background: linear-gradient(135deg, #0052CC 0%, #003d99 100%);
 }
 
 .travelers-btn:hover {
-  background: linear-gradient(135deg, #0a1f34 0%, #152d48 100%);
+  background: linear-gradient(135deg, #0042a3 0%, #00308a 100%);
 }
 
 .add-btn {
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #FF9500 0%, #FF7F00 100%);
 }
 
 .add-btn:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #1834a9 100%);
+  background: linear-gradient(135deg, #e68700 0%, #e67e00 100%);
 }
 
 .cities-btn {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #7C3AED 0%, #6d28d9 100%);
 }
 
 .cities-btn:hover {
-  background: linear-gradient(135deg, #048d69 0%, #036a52 100%);
+  background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+}
+
+/* DESTINATION WIDGET */
+
+.destination-widget {
+  background: white;
+  padding: 32px 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f4f8;
+}
+
+.destination-widget h3 {
+  color: #1a3a5c;
+  font-size: 20px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.widget-subtitle {
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.destination-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.destination-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #f0f4f8 100%);
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.destination-card:hover {
+  border-color: #0052CC;
+  box-shadow: 0 4px 12px rgba(0, 52, 204, 0.15);
+  transform: translateY(-2px);
+}
+
+.destination-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.destination-header h4 {
+  color: #1a3a5c;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.traveler-count {
+  background: #0052CC;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  min-width: 35px;
+  text-align: center;
+}
+
+.destination-travelers {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.destination-travelers ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.destination-travelers li {
+  font-size: 13px;
+  color: #555;
+  padding: 6px 0;
+  font-weight: 500;
+}
+
+.no-destinations {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
 }
 
 .quick-stats {
@@ -148,7 +244,7 @@
 .stat-number {
   font-size: 28px;
   font-weight: 700;
-  color: #1a3a5c;
+  color: #0052CC;
   margin-bottom: 4px;
 }
 
@@ -181,6 +277,10 @@
     font-size: 28px;
   }
 
+  .destination-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .quick-stats {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
@@ -207,6 +307,10 @@
 
   .btn-icon {
     font-size: 24px;
+  }
+
+  .destination-grid {
+    grid-template-columns: 1fr;
   }
 
   .quick-stats {
