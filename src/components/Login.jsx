@@ -138,6 +138,10 @@ export default function Login() {
             <p>Build relationships with your travel community</p>
           </div>
         </div>
+
+        <footer className="login-footer">
+          <p>Questions or feedback? Email: <a href="mailto:hardeep.soni09@gmail.com">hardeep.soni09@gmail.com</a></p>
+        </footer>
       </div>
     </div>
   );

@@ -104,9 +104,9 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #1a3a5c;
+  border-color: #0d2847;
   background: white;
-  box-shadow: 0 0 0 4px rgba(26, 58, 92, 0.08);
+  box-shadow: 0 0 0 4px rgba(13, 40, 71, 0.08);
 }
 
 .form-group input::placeholder {
@@ -204,7 +204,7 @@
 .toggle-button {
   background: none;
   border: none;
-  color: #1a3a5c;
+  color: #0d2847;
   cursor: pointer;
   font-weight: 700;
   text-decoration: underline;
@@ -214,7 +214,7 @@
 }
 
 .toggle-button:hover {
-  color: #0d2847;
+  color: #003d99;
 }
 
 .login-info {
@@ -255,6 +255,32 @@
   opacity: 0.9;
 }
 
+.login-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+}
+
+.login-footer p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.login-footer a {
+  color: rgba(255, 255, 255, 1);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+  color: #ffffff;
+}
+
 @media (max-width: 1024px) {
   .login-wrapper {
     grid-template-columns: 1fr;
@@ -286,6 +312,11 @@
 
   .info-card {
     padding: 16px;
+  }
+
+  .login-footer {
+    margin-top: 30px;
+    font-size: 12px;
   }
 }
 
@@ -325,6 +356,11 @@
   }
 
   .info-card p {
+    font-size: 11px;
+  }
+
+  .login-footer {
+    margin-top: 20px;
     font-size: 11px;
   }
 }
