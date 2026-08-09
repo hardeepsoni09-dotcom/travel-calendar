@@ -70,7 +70,7 @@ export default function App() {
       <header className="app-header">
         <div className="header-content">
           <h1 className="app-title">✈️ Au-India-Travel</h1>
-          <p className="app-subtitle">Australia ↔ India Community</p>
+          <p className="app-subtitle">Australian (Sydney) Chapter of ICAI Community</p>
         </div>
         <div className="user-section">
           <div className="user-info">
